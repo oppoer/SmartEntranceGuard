@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         Button ServiceIp_btn;
         EditText ServiceIP_edit;
         EditText UDPtext;
-//        public UDPThread =null;
+        public UDPThread = null;
         Boolean UDPreceive = Boolean.valueOf(false);
         String buffer = "";
         Bundle bundle = null;
@@ -259,6 +259,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * created by xukang.wang on 2015/12/18
+     * this is just a thread for UDP tansport
+     */
 class UDPThread extends Thread{
     public  String ip;
     private DataJsonList json;
@@ -277,16 +281,25 @@ class UDPThread extends Thread{
                 str1.substring(6,8);
                 str1.substring(8,10);
                 str1.substring(10,12);
-                str1.substring();
-                str1.substring();
-                str1.substring()
-
-
+                str1.substring(12,16);
+                str1.substring(16,18);
+                String str2=str1.substring(18,-2+str1.length());
+                json=new Gson().fromJson(str2,DataJsonList.class);
+                MainActivity.this.bundle.clear();
+                MainActivity.this.bundle.putString("msg", json.getLocalIP());
+                MainActivity.this.msg = MainActivity.this.myHandler.obtainMessage();
+                MainActivity.this.msg.what = 18;
+                MainActivity.this.msg.setData(MainActivity.this.bundle);
+                MainActivity.this.myHandler.sendMessage(MainActivity.this.msg);
+                Log.d("ThreadLog","continue");
 
             }
+        }catch (IOException localIOException){
+            localIOException.printStackTrace();
         }
     }
 }
+
 
 }
 
