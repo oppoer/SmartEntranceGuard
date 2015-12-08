@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         Button ServiceIp_btn;
         EditText ServiceIP_edit;
         EditText UDPtext;
-        public UDPThread = null;
+        public UDPThread UDPThread = null;
         Boolean UDPreceive = Boolean.valueOf(false);
         String buffer = "";
         Bundle bundle = null;
@@ -182,10 +182,9 @@ public class MainActivity extends AppCompatActivity {
         if(str3.length()>1);
         while(true){
             return paramString1.toUpperCase()+paramString2+paramString3+paramString4+str1.toUpperCase()+str2.toUpperCase()+paramString5+paramString6+str3.toUpperCase();
-            str3 = "0"+str3;
+            str3="0" + str3;
         }
-        /*this is a */
-//        return str3;
+
     }
 
     @Override
@@ -283,7 +282,7 @@ class UDPThread extends Thread{
                 str1.substring(10,12);
                 str1.substring(12,16);
                 str1.substring(16,18);
-                String str2=str1.substring(18,-2+str1.length());
+                String str2=str1.substring(18, -2 + str1.length());
                 json=new Gson().fromJson(str2,DataJsonList.class);
                 MainActivity.this.bundle.clear();
                 MainActivity.this.bundle.putString("msg", json.getLocalIP());
@@ -291,7 +290,7 @@ class UDPThread extends Thread{
                 MainActivity.this.msg.what = 18;
                 MainActivity.this.msg.setData(MainActivity.this.bundle);
                 MainActivity.this.myHandler.sendMessage(MainActivity.this.msg);
-                Log.d("ThreadLog","continue");
+                Log.d("ThreadLog", "continue");
 
             }
         }catch (IOException localIOException){
@@ -300,6 +299,68 @@ class UDPThread extends Thread{
     }
 }
 
+    /**
+     * created by xukang.wang on 2015/12/8
+     * this is socket for telecommunication
+     */
+
+    class socketThread extends Thread{
+        public String ip;
+        public String messageView;
+        public Integer port;
+        public socketThread(String paramInteger,Integer arg3){
+            this.ip = paramInteger;
+            Object localObject;
+            this.port = localObject;
+        }
+        public void run(){
+            try{
+                MainActivity.this.socket = new Socket();
+                MainActivity.this.socket.connect(new InetSocketAddress(this.ip,this.port.intValue()),5000);
+                MainActivity.this.input= new DataInputStream(MainActivity.this.socket.getInputStream());
+                MainActivity.this.out = new DataOutputStream(MainActivity.this.socket.getOutputStream());
+                MainActivity.this.bundle.clear();
+                MainActivity.this.bundle.putString("msg", "connect success");
+                MainActivity.this.msg =MainActivity.this.myHandler.obtainMessage();
+                MainActivity.this.msg.what =16;
+                MainActivity.this.msg.setData(MainActivity.this.bundle);
+                MainActivity.this.myHandler.sendMessage(MainActivity.this.msg);
+                String str = MainActivity.responseCommand("FFFE","01","00","00","00","");
+                long l1 =System.currentTimeMillis();
+                while(true){
+                    if(MainActivity.this.socket.isClosed())
+                        return;
+                    long l2 =System.currentTimeMillis();
+                    if(l2-l1>5000L){
+                        try{
+                            MainActivity.this.out.write(str.getBytes());
+                            MainActivity.this.out.flush();
+                            l1 =System.currentTimeMillis();
+                            MainActivity.this.bundle.clear();
+                            MainActivity.this.bundle.putString("msg", "心跳" + str);
+                            MainActivity.this.msg = MainActivity.this.myHandler.obtainMessage();
+                            MainActivity.this.msg.setData(MainActivity.this.bundle);
+                            MainActivity.this.msg.what =17;
+                            MainActivity.this.myHandler.sendMessage(MainActivity.this.msg);
+                        }catch (IOException localIOException2){
+                            localIOException2.printStackTrace();
+                        }
+                    }
+                }
+            }catch (SocketTimeoutException localSocketTimeoutException){
+                MainActivity.this.bundle.clear();
+                MainActivity.this.bundle.putString("msg", "服务器连接失败，请检查网络是否打开");
+                MainActivity.this.msg = MainActivity.this.myHandler.obtainMessage();
+                MainActivity.this.msg.setData(MainActivity.this.bundle);
+                MainActivity.this.msg.what = 22;
+                MainActivity.this.myHandler.sendMessage(MainActivity.this.msg);
+                return;
+            }
+            catch (IOException localIOException1){
+                localIOException1.printStackTrace();
+            }
+        }
+    }
 
 }
 
