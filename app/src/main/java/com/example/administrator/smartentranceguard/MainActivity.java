@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         EditText port;
         Button restart_btn;
         Socket socket = null;
-//        public socketThread socketThread = null;
+        public socketThread socketThread = null;
         String strIP;
         EditText updEditText;
         EditText value_1;
