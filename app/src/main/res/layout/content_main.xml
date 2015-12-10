@@ -14,9 +14,10 @@
         android:id="@+id/textView" />
 
     <EditText
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button"
+        android:id="@+id/ip_number"
         android:text="6603"
         android:layout_below="@+id/textView"
         android:layout_alignParentRight="true"
@@ -24,9 +25,44 @@
         android:layout_marginTop="27dp" />
 
     <EditText
+        android:id="@+id/ip_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button"
+        android:layout_below="@+id/ip_number"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+    <EditText
+        android:id="@+id/port_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ip_edit"
+        android:text="6602"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    <Button
+        android:id="@+id/link_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/port_edit"
+        android:text="link_btn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    <EditText
+        android:id="@+id/opendoor_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/link_btn"
+        android:text="FFFE0104011200140001"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    <Button
+        android:id="@+id/opendoor_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/opendoor_edit"
+        android:text="OpenDoor"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
 </RelativeLayout>
