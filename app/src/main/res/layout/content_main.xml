@@ -52,7 +52,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/link_btn"
-        android:text="FFFE0104011200140001"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
     <Button

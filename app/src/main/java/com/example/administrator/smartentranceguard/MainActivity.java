@@ -211,7 +211,31 @@ public class MainActivity extends AppCompatActivity {
         this.link_btn.setOnClickListener(new View.OnClickListener() {
 
                                     public void onClick(View paramAnonymousView){
-                                        if((MainActivity.this.ip.getText().toString().trim().equals(""))||);
+                                        if((MainActivity.this.ip.getText().toString().trim().equals(""))||(MainActivity.this.port.getText().toString().trim().equals(""))){
+
+                                            Toast.makeText(MainActivity.this.getApplicationContext(),"IP AND PORT is not null", 0).show();
+                                            return;
+                                        }
+                                        if((MainActivity.this.socket!=null)&&(!MainActivity.this.socket.isClosed())){
+                                            try{
+                                                MainActivity.this.out.close();
+                                                MainActivity.this.input.close();
+                                                MainActivity.this.socket.close();
+                                                MainActivity.this.bundle.clear();
+                                                MainActivity.this.bundle.putString("msg", "close");
+                                                MainActivity.this.msg=MainActivity.this.myHandler.obtainMessage();
+                                                MainActivity.this.msg.what =9;
+                                                MainActivity.this.msg.setData(MainActivity.this.bundle);
+                                                MainActivity.this.myHandler.sendMessage(MainActivity.this.msg);
+                                                return;
+                                            }catch (IOException localIOException){
+                                                localIOException.printStackTrace();
+                                                return;
+                                            }
+
+
+
+                                        }
                                     }
                                          }
 
