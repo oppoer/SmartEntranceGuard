@@ -203,6 +203,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        this.ip =((EditText)findViewById(R.id.ip_edit));
+        this.port=((EditText)findViewById(R.id.port_edit));
+        this.msg = new Message();
+        this.bundle = new Bundle();
+        this.link_btn = ((Button)findViewById(R.id.link_btn));
+        this.link_btn.setOnClickListener(new View.OnClickListener() {
+
+                                    public void onClick(View paramAnonymousView){
+                                        if((MainActivity.this.ip.getText().toString().trim().equals(""))||);
+                                    }
+                                         }
+
+        );
+
+
     }
 
 
