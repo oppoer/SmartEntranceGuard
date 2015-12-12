@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                     MainActivity.this.messageView.setText(localBundle.getString("msg") + "\n");
                 }
                 do {
-                    return;
+//                    return;
                     if(paramAnonymousMessage.what == 16){
                         MainActivity.this.messageView.setText(localBundle.getString("msg") + "\n");
                         Toast.makeText(MainActivity.this.getApplicationContext(),"link success",0).show();
@@ -178,11 +178,11 @@ public class MainActivity extends AppCompatActivity {
     public static String responseCommand(String paramString1,String paramString2,String paramString3,String paramString4,String paramString5,String paramString6){
         String str1 = intToHex(Integer.valueOf(4+(2+(paramString1.length()+paramString2.length()+paramString3.length()+paramString4.length()))+paramString5.length()));
         String str2 = "00" + intToHex(Integer.valueOf(2+(4+(2+(paramString1.length()+paramString2.length()+paramString3.length()+paramString4.length()))+paramString5.length()+paramString6.length())));
-        String str3 = getCheckNumber(paramString1.toUpperCase()+paramString2+paramString3+paramString4+str1.toUpperCase()+str2.toUpperCase()+paramString5+paramString6);
+        String str3 = getCheckNumber(paramString1.toUpperCase() + paramString2 + paramString3 + paramString4 + str1.toUpperCase() + str2.toUpperCase() + paramString5 + paramString6);
         if(str3.length()>1);
         while(true){
             return paramString1.toUpperCase()+paramString2+paramString3+paramString4+str1.toUpperCase()+str2.toUpperCase()+paramString5+paramString6+str3.toUpperCase();
-            str3="0" + str3;
+//            str3="0" + str3;
         }
 
     }
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                                                      Toast.makeText(MainActivity.this.getApplicationContext(), "IP AND PORT is not null", 0).show();
                                                      return;
                                                  }
-                                                 if ((MainActivity.this.socket != null) && (!MainActivity.this.socket.isClosed())) {
+                                                 if ((MainActivity.this.socket != null) && (!MainActivity.this.socket.isClosed()))
                                                      try {
                                                          MainActivity.this.out.close();
                                                          MainActivity.this.input.close();
@@ -235,16 +235,92 @@ public class MainActivity extends AppCompatActivity {
 
                                                      MainActivity.this.strIP = MainActivity.this.ip.getText().toString();
                                                      MainActivity.this.intPort = Integer.valueOf(MainActivity.this.port.getText().toString());
-                                                     MainActivity.this.socketThread = new MainActivity().socketThread(MainActivity.this, MainActivity.this.strIP, MainActivity.this.intPort);
+                                                     MainActivity.this.socketThread = new MainActivity().socketThread( MainActivity.this.strIP, MainActivity.this.intPort);
                                                      MainActivity.this.socketThread.start();
                                                      MainActivity.this.link_btn.setText("close");
-
-                                                 }
                                              }
                                          }
 
 
         );
+
+        this.messageView =(TextView)findViewById(R.id.messageView);
+        this.opendoor_btn =(Button)findViewById(R.id.opendoor_btn);
+        this.opendoor_edit =(EditText)findViewById(R.id.opendoor_edit);
+        this.opendoor_edit.setText(responseCommand("FFFE","01","04","01","00",""));
+        this.opendoor_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View paramAnonymousView) {
+                if ((MainActivity.this.socket == null) || (MainActivity.this.socket.isClosed())) {
+                    Toast.makeText(MainActivity.this.getApplicationContext(), "please connect server", 0).show();
+                    return;
+                }
+                try {
+                    MainActivity.this.out.write(MainActivity.this.opendoor_edit.getText().toString().getBytes());
+                    MainActivity.this.out.flush();
+                    MainActivity.this.bundle.clear();
+                    MainActivity.this.bundle.putString("msg", "门开");
+                    MainActivity.this.msg = MainActivity.this.myHandler.obtainMessage();
+                    MainActivity.this.msg.what = 22;
+                    MainActivity.this.msg.setData(MainActivity.this.bundle);
+                    MainActivity.this.myHandler.sendMessage(MainActivity.this.msg);
+                    return;
+                } catch (IOException localIOException) {
+                    localIOException.printStackTrace();
+                }
+
+            }
+        });
+
+        this.closedoor_btn =(Button)findViewById(R.id.closedoor_btn);
+        this.closedoor_edit=(EditText)findViewById(R.id.closedoor_edit);
+        this.closedoor_edit.setText(responseCommand("FFFE","01","04","02","00",""));
+        this.closedoor_btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View paramAnonymousView) {
+                if ((MainActivity.this.socket == null) || (MainActivity.this.socket.isClosed())) {
+                    Toast.makeText(MainActivity.this.getApplicationContext(), "please connect server", 0).show();
+                    return;
+                }
+                try {
+                    MainActivity.this.out.write(MainActivity.this.closedoor_edit.getText().toString().getBytes());
+                    MainActivity.this.out.flush();
+                    MainActivity.this.bundle.clear();
+                    MainActivity.this.bundle.putString("msg", "门关");
+                    MainActivity.this.msg = MainActivity.this.myHandler.obtainMessage();
+                    MainActivity.this.msg.what = 22;
+                    MainActivity.this.msg.setData(MainActivity.this.bundle);
+                    MainActivity.this.myHandler.sendMessage(MainActivity.this.msg);
+
+                } catch (IOException localIOException) {
+                    localIOException.printStackTrace();
+                }
+            }
+        });
+
+        this.updEditText =(EditText)findViewById(R.id.udptext_edit);
+        this.updEditText.setText("6603");
+
+        try{
+            byte[] arrayOfByte = new byte[100];
+            this.datagramSocket = new DatagramSocket(Integer.valueOf(this.updEditText.getText().toString()).intValue());
+            this.datagramSocket.setBroadcast(true);
+            this.datagramPacket = new DatagramPacket(arrayOfByte,arrayOfByte.length);
+            this.UDPThread = new UDPThread();
+            this.UDPThread.start();
+            this.UDPreceive = Boolean.valueOf(true);
+            this.bundle.clear();
+            this.bundle.putString("msg", "监听成功");
+            this.msg = this.myHandler.obtainMessage();
+            this.msg.what =22;
+            this.msg.setData(this.bundle);
+            this.myHandler.sendMessage(this.msg);
+            setButtonView(Boolean.valueOf(false));
+            responseCommand("FFFE","01","05","00","00","{\"LocalIp\":\"195.168.1.111\"}");
+            return;
+        }catch (IOException localIOException){
+            while (true) {
+                localIOException.printStackTrace();
+            }
+        }
 
 
     }
@@ -273,6 +349,33 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+
+    protected  void onDestroy(){
+        while (true){
+            if((this.socket ==null)||(this.socket.isClosed())){
+                this.datagramSocket = null;
+                this.datagramPacket = null;
+                this.UDPreceive = Boolean.valueOf(false);
+                this.UDPThread = null;
+                this.UDPThread.interrupt();
+                Log.i("ThreadLog", "销毁");
+                super.onDestroy();
+                return;
+
+            }
+            try{
+                this.out.close();
+                this.input.close();
+                this.socket.close();
+            }
+            catch (IOException localIOException){
+                localIOException.printStackTrace();
+            }
+
+        }
+
+    }
     /**
      * created by xukang.wang.on 2015/12/7
      * set Button state view
@@ -354,8 +457,8 @@ class UDPThread extends Thread{
         public Integer port;
         public socketThread(String paramInteger,Integer arg3){
             this.ip = paramInteger;
-            Object localObject;
-            this.port = localObject;
+//            Object localObject;
+            this.port = arg3;
         }
         public void run(){
             try{
