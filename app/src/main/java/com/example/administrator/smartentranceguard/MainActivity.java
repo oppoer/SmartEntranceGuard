@@ -205,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.ip =((EditText)findViewById(R.id.ip_edit));
         this.port=((EditText)findViewById(R.id.port_edit));
+        this.port.setText("6602");
         this.msg = new Message();
         this.bundle = new Bundle();
         this.link_btn = ((Button)findViewById(R.id.link_btn));
@@ -235,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
                                                      MainActivity.this.strIP = MainActivity.this.ip.getText().toString();
                                                      MainActivity.this.intPort = Integer.valueOf(MainActivity.this.port.getText().toString());
-                                                     MainActivity.this.socketThread = new MainActivity().socketThread( MainActivity.this.strIP, MainActivity.this.intPort);
+                                                     MainActivity.this.socketThread = new MainActivity.socketThread(MainActivity.this.strIP, MainActivity.this.intPort);
                                                      MainActivity.this.socketThread.start();
                                                      MainActivity.this.link_btn.setText("close");
                                              }
