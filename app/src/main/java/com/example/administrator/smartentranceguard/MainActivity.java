@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * varible  param
-     * @param
+     *
      */
         Button AutoOpenTime_btn;
         EditText AutoOpenTime_edit;
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
      * it handler message method
      */
 
-    public Handler myHandler;
+    public   Handler myHandler;
 
     {
         myHandler = new Handler() {
@@ -94,12 +94,12 @@ public class MainActivity extends AppCompatActivity {
 //                    return;
                     if(paramAnonymousMessage.what == 16){
                         MainActivity.this.messageView.setText(localBundle.getString("msg") + "\n");
-                        Toast.makeText(MainActivity.this.getApplicationContext(),"link success",0).show();
+                        Toast.makeText(MainActivity.this.getApplicationContext(),"link success",Toast.LENGTH_LONG).show();
                         return;
                     }
                     if(paramAnonymousMessage.what == 9){
                         MainActivity.this.messageView.setText(localBundle.getString("msg") + "\n");
-                        Toast.makeText(MainActivity.this.getApplicationContext(),"break success",0).show();
+                        Toast.makeText(MainActivity.this.getApplicationContext(),"break success",Toast.LENGTH_LONG).show();
                         return;
                     }
                     if(paramAnonymousMessage.what == 18){
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 } while (paramAnonymousMessage.what == 22);
 
                 MainActivity.this.messageView.setText(localBundle.getString("msg") + "\n");
-                Toast.makeText(MainActivity.this.getApplicationContext(),localBundle.getString("msg"),0).show();
+                Toast.makeText(MainActivity.this.getApplicationContext(),localBundle.getString("msg"),Toast.LENGTH_LONG).show();
             }
 
         };
@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                                              public void onClick(View paramAnonymousView) {
                                                  if ((MainActivity.this.ip.getText().toString().trim().equals("")) || (MainActivity.this.port.getText().toString().trim().equals(""))) {
 
-                                                     Toast.makeText(MainActivity.this.getApplicationContext(), "IP AND PORT is not null", 0).show();
+                                                     Toast.makeText(MainActivity.this.getApplicationContext(), "IP AND PORT is not null", Toast.LENGTH_LONG).show();
                                                      return;
                                                  }
                                                  if ((MainActivity.this.socket != null) && (!MainActivity.this.socket.isClosed()))
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity {
         this.opendoor_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View paramAnonymousView) {
                 if ((MainActivity.this.socket == null) || (MainActivity.this.socket.isClosed())) {
-                    Toast.makeText(MainActivity.this.getApplicationContext(), "please connect server", 0).show();
+                    Toast.makeText(MainActivity.this.getApplicationContext(), "please connect server", Toast.LENGTH_LONG).show();
                     return;
                 }
                 try {
@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         this.closedoor_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View paramAnonymousView) {
                 if ((MainActivity.this.socket == null) || (MainActivity.this.socket.isClosed())) {
-                    Toast.makeText(MainActivity.this.getApplicationContext(), "please connect server", 0).show();
+                    Toast.makeText(MainActivity.this.getApplicationContext(), "please connect server", Toast.LENGTH_LONG).show();
                     return;
                 }
                 try {
@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
             this.msg.setData(this.bundle);
             this.myHandler.sendMessage(this.msg);
             setButtonView(Boolean.valueOf(false));
-            responseCommand("FFFE","01","05","00","00","{\"LocalIp\":\"195.168.1.111\"}");
+            responseCommand("FFFE","01","05","00","00","{\"LocalIp\":\"192.168.1.111\"}");
             return;
         }catch (IOException localIOException){
             while (true) {
