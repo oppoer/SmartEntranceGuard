@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     if(paramAnonymousMessage.what == 18){
                         MainActivity.this.ip.setText("");
                         MainActivity.this.ip.setText(localBundle.getString("msg").trim() + "\n");
-                        MainActivity.this.setButtonView(Boolean.valueOf(true));
+//                        MainActivity.this.setButtonView(Boolean.valueOf(true));
                         return;
                     }
                 } while (paramAnonymousMessage.what !=22);
@@ -179,10 +179,9 @@ public class MainActivity extends AppCompatActivity {
         String str1 = intToHex(Integer.valueOf((4+(2+(paramString1.length()+paramString2.length()+paramString3.length()+paramString4.length()))+paramString5.length())));
         String str2 = "00"+intToHex(Integer.valueOf(Integer.valueOf(2 + (4 + (2 + (paramString1.length() + paramString2.length() + paramString3.length() + paramString4.length())) + paramString5.length() + paramString6.length()))));
         String str3 = getCheckNumber(paramString1.toUpperCase()+paramString2+paramString3+paramString4+str1.toUpperCase()+str2.toUpperCase()+paramString5+paramString6);
-        if(str3.length()<1);
-        while(true){
-            return paramString1.toUpperCase()+paramString2+paramString3+paramString4+str1.toUpperCase()+str2.toUpperCase()+paramString5+paramString6+str3.toUpperCase();
-        }
+
+        return paramString1.toUpperCase()+paramString2+paramString3+paramString4+str1.toUpperCase()+str2.toUpperCase()+paramString5+paramString6+str3.toUpperCase();
+
     }
 
     @Override
@@ -260,7 +259,6 @@ public class MainActivity extends AppCompatActivity {
                     MainActivity.this.msg.what = 22;
                     MainActivity.this.msg.setData(MainActivity.this.bundle);
                     MainActivity.this.myHandler.sendMessage(MainActivity.this.msg);
-                    return;
                 } catch (IOException localIOException) {
                     localIOException.printStackTrace();
                 }
@@ -310,13 +308,13 @@ public class MainActivity extends AppCompatActivity {
             this.msg.what =22;
             this.msg.setData(this.bundle);
             this.myHandler.sendMessage(this.msg);
-            setButtonView(Boolean.valueOf(true));
+//            setButtonView(Boolean.valueOf(true));
           //  CombineCommand("FFFE", "01", "05", "00", "00", "{\"LocalIp\":\"192.168.1.111\"}");
-            return;
+
         }catch (IOException localIOException){
-            while (true) {
+
                 localIOException.printStackTrace();
-            }
+
         }
 
 
@@ -380,27 +378,27 @@ public class MainActivity extends AppCompatActivity {
      * @param paramBoolean
      */
 
-    public void setButtonView(Boolean paramBoolean){
-
-        this.link_btn.setEnabled(paramBoolean.booleanValue());
-        this.opendoor_btn.setEnabled(paramBoolean.booleanValue());
-        this.closedoor_btn.setEnabled(paramBoolean.booleanValue());
-        this.SSID_btn.setEnabled(paramBoolean.booleanValue());
-        this.PWD_btn.setEnabled(paramBoolean.booleanValue());
-        this.ServiceIp_btn.setEnabled(paramBoolean.booleanValue());
-        this.handleOpenTime_btn.setEnabled(paramBoolean.booleanValue());
-        this.AutoOpenTime_btn.setEnabled(paramBoolean.booleanValue());
-        this.restart_btn.setEnabled(paramBoolean.booleanValue());
-        this.RSSI_btn1.setEnabled(paramBoolean.booleanValue());
-        this.RSSI_btn2.setEnabled(paramBoolean.booleanValue());
-        this.RSSI_btn3.setEnabled(paramBoolean.booleanValue());
-        this.RSSI_btn4.setEnabled(paramBoolean.booleanValue());
-        this.value_btn_1.setEnabled(paramBoolean.booleanValue());
-        this.value_btn_2.setEnabled(paramBoolean.booleanValue());
-        this.value_btn_3.setEnabled(paramBoolean.booleanValue());
-        this.value_btn_4.setEnabled(paramBoolean.booleanValue());
-
-    }
+//    public void setButtonView(Boolean paramBoolean){
+//
+//        this.link_btn.setEnabled(paramBoolean.booleanValue());
+//        this.opendoor_btn.setEnabled(paramBoolean.booleanValue());
+//        this.closedoor_btn.setEnabled(paramBoolean.booleanValue());
+//        this.SSID_btn.setEnabled(paramBoolean.booleanValue());
+//        this.PWD_btn.setEnabled(paramBoolean.booleanValue());
+//        this.ServiceIp_btn.setEnabled(paramBoolean.booleanValue());
+//        this.handleOpenTime_btn.setEnabled(paramBoolean.booleanValue());
+//        this.AutoOpenTime_btn.setEnabled(paramBoolean.booleanValue());
+//        this.restart_btn.setEnabled(paramBoolean.booleanValue());
+//        this.RSSI_btn1.setEnabled(paramBoolean.booleanValue());
+//        this.RSSI_btn2.setEnabled(paramBoolean.booleanValue());
+//        this.RSSI_btn3.setEnabled(paramBoolean.booleanValue());
+//        this.RSSI_btn4.setEnabled(paramBoolean.booleanValue());
+//        this.value_btn_1.setEnabled(paramBoolean.booleanValue());
+//        this.value_btn_2.setEnabled(paramBoolean.booleanValue());
+//        this.value_btn_3.setEnabled(paramBoolean.booleanValue());
+//        this.value_btn_4.setEnabled(paramBoolean.booleanValue());
+//
+//    }
 
     /**
      * created by xukang.wang on 2015/12/18
@@ -499,7 +497,7 @@ class UDPThread extends Thread{
                 MainActivity.this.msg.setData(MainActivity.this.bundle);
                 MainActivity.this.msg.what = 22;
                 MainActivity.this.myHandler.sendMessage(MainActivity.this.msg);
-                return;
+
             }
             catch (IOException localIOException1){
                 localIOException1.printStackTrace();
