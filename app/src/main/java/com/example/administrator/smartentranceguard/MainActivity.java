@@ -1,23 +1,21 @@
 package com.example.administrator.smartentranceguard;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.os.Handler;
-import android.os.Message;
-import android.text.Editable;
-import android.util.Log;
-import android.view.View.OnClickListener;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.gson.Gson;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -26,7 +24,6 @@ import java.net.DatagramSocket;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.security.PrivilegedAction;
 
 /**
  * created by xukang.wang on 12/6/2015
@@ -59,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
         Button ServiceIp_btn;
         EditText ServiceIP_edit;
         EditText UDPtext;
-        public UDPThread UDPThread = null;
-        Boolean UDPreceive = Boolean.valueOf(false);
+//        public UDPThread UDPThread = null;
+//        Boolean UDPreceive = Boolean.valueOf(false);
         String buffer = "";
         Bundle bundle = null;
         String closeStr;
@@ -70,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         DatagramSocket datagramSocket = null;
         Button handleOpenTime_btn;
         DataInputStream input = null;
-        Integer intPort;
         EditText ip;
         Button link_btn;
         TextView messageView;
@@ -91,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
                     MainActivity.this.messageView.setText(localBundle.getString("msg") + "\n");
                 }
                 do {
-//                    return;
                     if(paramAnonymousMessage.what == 16){
                         MainActivity.this.messageView.setText(localBundle.getString("msg") + "\n");
                         Toast.makeText(MainActivity.this.getApplicationContext(),"link success",Toast.LENGTH_LONG).show();
@@ -108,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                         MainActivity.this.setButtonView(Boolean.valueOf(true));
                         return;
                     }
-                } while (paramAnonymousMessage.what == 22);
+                } while (paramAnonymousMessage.what !=22);
 
                 MainActivity.this.messageView.setText(localBundle.getString("msg") + "\n");
                 Toast.makeText(MainActivity.this.getApplicationContext(),localBundle.getString("msg"),Toast.LENGTH_LONG).show();
@@ -124,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         Button restart_btn;
         Socket socket = null;
         public socketThread socketThread = null;
-        String strIP;
         EditText updEditText;
         EditText value_1;
         EditText value_2;
@@ -134,9 +128,12 @@ public class MainActivity extends AppCompatActivity {
         Button value_btn_2;
         Button value_btn_3;
         Button value_btn_4;
+        private static final String IP ="10.10.10.254";
+        private static final Integer Port = Integer.valueOf(6602);
 
     /**
      * created by xukang.wang on 2015/12/7
+     * new version on 2015.12.29
      * check Number  what is substring, INT to HEX AND String
      *  getBytes.
      * @param paramString
@@ -144,22 +141,25 @@ public class MainActivity extends AppCompatActivity {
      */
 
     public static String getCheckNumber(String paramString){
-        int i = paramString.substring(0,1).getBytes()[0];
-        for(int j =0;;j++){
+        int i =paramString.substring(0, 1).getBytes()[0];
+        for(int j=1;;j++){
             if(j>=paramString.length())
                 return intToHex(Integer.valueOf(i));
-            i=(byte)(i^paramString.substring(j,j+1).getBytes()[0]);
+            i=(byte)(i^paramString.substring(j, j+1).getBytes()[0]);
+
         }
     }
 
     /**
-     * int to Hex
+     * int to Hex()
      * create by xukang.wang on 2015/12/7
+     * new version on 2015.12.29
       * @param paramInteger
      * @return
      */
     public static String intToHex(Integer paramInteger){
-        return Integer.toHexString(paramInteger.intValue());
+        return Integer.toHexString((paramInteger.intValue()&0x000000FF)|0xFFFFFF00).substring(6);
+
     }
 
     /**
@@ -175,16 +175,14 @@ public class MainActivity extends AppCompatActivity {
      * @return
      */
 
-    public static String responseCommand(String paramString1,String paramString2,String paramString3,String paramString4,String paramString5,String paramString6){
-        String str1 = intToHex(Integer.valueOf(4+(2+(paramString1.length()+paramString2.length()+paramString3.length()+paramString4.length()))+paramString5.length()));
-        String str2 = "00" + intToHex(Integer.valueOf(2+(4+(2+(paramString1.length()+paramString2.length()+paramString3.length()+paramString4.length()))+paramString5.length()+paramString6.length())));
-        String str3 = getCheckNumber(paramString1.toUpperCase() + paramString2 + paramString3 + paramString4 + str1.toUpperCase() + str2.toUpperCase() + paramString5 + paramString6);
-        if(str3.length()>1);
+    public static String CombineCommand(String paramString1,String paramString2,String paramString3,String paramString4,String paramString5,String paramString6){
+        String str1 = intToHex(Integer.valueOf((4+(2+(paramString1.length()+paramString2.length()+paramString3.length()+paramString4.length()))+paramString5.length())));
+        String str2 = "00"+intToHex(Integer.valueOf(Integer.valueOf(2 + (4 + (2 + (paramString1.length() + paramString2.length() + paramString3.length() + paramString4.length())) + paramString5.length() + paramString6.length()))));
+        String str3 = getCheckNumber(paramString1.toUpperCase()+paramString2+paramString3+paramString4+str1.toUpperCase()+str2.toUpperCase()+paramString5+paramString6);
+        if(str3.length()<1);
         while(true){
             return paramString1.toUpperCase()+paramString2+paramString3+paramString4+str1.toUpperCase()+str2.toUpperCase()+paramString5+paramString6+str3.toUpperCase();
-//            str3="0" + str3;
         }
-
     }
 
     @Override
@@ -206,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         this.ip =((EditText)findViewById(R.id.ip_edit));
         this.port=((EditText)findViewById(R.id.port_edit));
         this.port.setText("6602");
+        this.ip.setText("10.10.10.254");
         this.msg = new Message();
         this.bundle = new Bundle();
         this.link_btn = ((Button)findViewById(R.id.link_btn));
@@ -233,11 +232,8 @@ public class MainActivity extends AppCompatActivity {
                                                          localIOException.printStackTrace();
                                                          return;
                                                      }
-
-                                                     MainActivity.this.strIP = MainActivity.this.ip.getText().toString();
-                                                     MainActivity.this.intPort = Integer.valueOf(MainActivity.this.port.getText().toString());
-                                                     MainActivity.this.socketThread = new MainActivity.socketThread(MainActivity.this.strIP, MainActivity.this.intPort);
-                                                     MainActivity.this.socketThread.start();
+                                                     MainActivity.this.socketThread = new MainActivity.socketThread(IP, Port);
+                                                     new Thread(MainActivity.this.socketThread).start();
                                                      MainActivity.this.link_btn.setText("close");
                                              }
                                          }
@@ -248,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         this.messageView =(TextView)findViewById(R.id.messageView);
         this.opendoor_btn =(Button)findViewById(R.id.opendoor_btn);
         this.opendoor_edit =(EditText)findViewById(R.id.opendoor_edit);
-        this.opendoor_edit.setText(responseCommand("FFFE","01","04","01","00",""));
+        this.opendoor_edit.setText(CombineCommand("FFFE", "01", "04", "01", "00", ""));
         this.opendoor_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View paramAnonymousView) {
                 if ((MainActivity.this.socket == null) || (MainActivity.this.socket.isClosed())) {
@@ -274,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
 
         this.closedoor_btn =(Button)findViewById(R.id.closedoor_btn);
         this.closedoor_edit=(EditText)findViewById(R.id.closedoor_edit);
-        this.closedoor_edit.setText(responseCommand("FFFE","01","04","02","00",""));
+        this.closedoor_edit.setText(CombineCommand("FFFE", "01", "04", "02", "00", ""));
         this.closedoor_btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View paramAnonymousView) {
                 if ((MainActivity.this.socket == null) || (MainActivity.this.socket.isClosed())) {
@@ -303,19 +299,19 @@ public class MainActivity extends AppCompatActivity {
         try{
             byte[] arrayOfByte = new byte[100];
             this.datagramSocket = new DatagramSocket(Integer.valueOf(this.updEditText.getText().toString()).intValue());
-            this.datagramSocket.setBroadcast(true);
+//            this.datagramSocket.setBroadcast(true);
             this.datagramPacket = new DatagramPacket(arrayOfByte,arrayOfByte.length);
-            this.UDPThread = new UDPThread();
-            this.UDPThread.start();
-            this.UDPreceive = Boolean.valueOf(true);
+//            this.UDPThread = new UDPThread();
+//            this.UDPThread.start();
+//            this.UDPreceive = Boolean.valueOf(true);
             this.bundle.clear();
             this.bundle.putString("msg", "监听成功");
             this.msg = this.myHandler.obtainMessage();
             this.msg.what =22;
             this.msg.setData(this.bundle);
             this.myHandler.sendMessage(this.msg);
-            setButtonView(Boolean.valueOf(false));
-            responseCommand("FFFE","01","05","00","00","{\"LocalIp\":\"192.168.1.111\"}");
+            setButtonView(Boolean.valueOf(true));
+          //  CombineCommand("FFFE", "01", "05", "00", "00", "{\"LocalIp\":\"192.168.1.111\"}");
             return;
         }catch (IOException localIOException){
             while (true) {
@@ -357,9 +353,9 @@ public class MainActivity extends AppCompatActivity {
             if((this.socket ==null)||(this.socket.isClosed())){
                 this.datagramSocket = null;
                 this.datagramPacket = null;
-                this.UDPreceive = Boolean.valueOf(false);
-                this.UDPThread = null;
-                this.UDPThread.interrupt();
+//                this.UDPreceive = Boolean.valueOf(false);
+//                this.UDPThread = null;
+//                this.UDPThread.interrupt();
                 Log.i("ThreadLog", "销毁");
                 super.onDestroy();
                 return;
@@ -410,6 +406,7 @@ public class MainActivity extends AppCompatActivity {
      * created by xukang.wang on 2015/12/18
      * this is just a thread for UDP tansport
      */
+    /*
 class UDPThread extends Thread{
     public  String ip;
     private DataJsonList json;
@@ -447,19 +444,19 @@ class UDPThread extends Thread{
     }
 }
 
+  */
+
     /**
      * created by xukang.wang on 2015/12/8
      * this is socket for telecommunication
      */
 
-    class socketThread extends Thread{
+    class socketThread implements Runnable{
         public String ip;
-        public String messageView;
         public Integer port;
-        public socketThread(String paramInteger,Integer arg3){
-            this.ip = paramInteger;
-//            Object localObject;
-            this.port = arg3;
+        public socketThread(String ip,Integer port){
+            this.ip = ip;
+            this.port= port;
         }
         public void run(){
             try{
@@ -473,7 +470,7 @@ class UDPThread extends Thread{
                 MainActivity.this.msg.what =16;
                 MainActivity.this.msg.setData(MainActivity.this.bundle);
                 MainActivity.this.myHandler.sendMessage(MainActivity.this.msg);
-                String str = MainActivity.responseCommand("FFFE","01","00","00","00","");
+                String str = MainActivity.CombineCommand("FFFE", "01", "00", "00", "00", "");
                 long l1 =System.currentTimeMillis();
                 while(true){
                     if(MainActivity.this.socket.isClosed())

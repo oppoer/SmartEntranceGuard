@@ -10,9 +10,10 @@
     tools:showIn="@layout/activity_main" tools:context=".MainActivity">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/messageView" />
+        android:id="@+id/messageView"
+        android:layout_alignParentTop="true" />
 
     <EditText
 
