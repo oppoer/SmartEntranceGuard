@@ -331,6 +331,39 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        this.wifi_value =(EditText)findViewById(R.id.wifi_value_edit);
+        this.wifi_value_btn = (Button)findViewById(R.id.wifi_value_btn);
+        this.wifi_value_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if((MainActivity.this.socket==null)||(MainActivity.this.socket.isClosed())){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please connect server",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(MainActivity.this.wifi_value.getText().toString().trim().equals("")){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please isnert wifi value",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                try{
+                    String str = CombineCommand("FFFE","O1","04","16","00","{\"RSSI_Change_Value\":\""+MainActivity.this.wifi_value.getText().toString()+"\"}");
+                    MainActivity.this.out.write(str.getBytes());
+                    MainActivity.this.out.flush();
+                    MainActivity.this.bundle.clear();
+                    MainActivity.this.bundle.putString("msg", "wifi value" + str);
+                    MainActivity.this.msg =MainActivity.this.myHandler.obtainMessage();
+                    MainActivity.this.msg.what=22;
+                    MainActivity.this.msg.setData(MainActivity.this.bundle);
+                    MainActivity.this.msg.sendToTarget();
+
+                }catch (IOException localIOException){
+                    localIOException.printStackTrace();
+                }
+
+            }
+        });
+
+
+
         
 
 
