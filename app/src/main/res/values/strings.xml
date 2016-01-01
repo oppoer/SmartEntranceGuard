@@ -1,4 +1,23 @@
 <resources>
     <string name="app_name">SmartEntranceGuard</string>
     <string name="action_settings">Settings</string>
+    <string name="link_btn">Link_Btn</string>
+    <string name="opendoor_btn">Opendoor_Btn</string>
+    <string name="closedoor_btn">Closedoor_Btn</string>
+    <string name="ssid_edit_hint">ssid_value</string>
+    <string name="ssid_btn">Change SSID</string>
+    <string name="ssid_passwd_hint">SSID_PASSWD</string>
+    <string name="ssid_passwd_btn">SSID_PASSWD_CHANGE</string>
+    <string name="wifi_value_hint">WIFI_VALUE</string>
+    <string name="wifi_value_btn">Change_WIFI_VALUE</string>
+    <string name="rssi_value_hint">RSSI_VALUE</string>
+    <string name="rssi_value_btn">RSSI_VALUE_CHANGE</string>
+    <string name="service_ip_hint">SERVICE_IP</string>
+    <string name="service_ip_btn">SERVICE_IP_CHANGE</string>
+    <string name="manual_odt_hint">Manual_od_time</string>
+    <string name="manual_odt_btn">Manual_odt_change</string>
+    <string name="auto_odt_hint">Auto_od_time</string>
+    <string name="auto_odt_btn">Auto_odt_change</string>
+    <string name="reboot_btn">Reboot</string>
+
 </resources>

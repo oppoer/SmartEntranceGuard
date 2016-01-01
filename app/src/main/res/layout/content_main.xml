@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/messageView"
+        android:hint="message"
         android:layout_alignParentTop="true" />
 
     <EditText
@@ -44,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/port_edit"
-        android:text="link_btn"
+        android:text="@string/link_btn"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
     <EditText
@@ -59,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/opendoor_edit"
-        android:text="OpenDoor"
+        android:text="@string/opendoor_btn"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
     <EditText
@@ -74,9 +75,133 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/closedoor_edit"
-        android:text="CloseDoor"
+        android:text="@string/closedoor_btn"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+    <EditText
+        android:id="@+id/ssid_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/ssid_edit_hint"
+        android:layout_below="@+id/closedoor_btn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <Button
+        android:id="@+id/ssid_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ssid_edit"
+        android:text="@string/ssid_btn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <EditText
+        android:id="@+id/ssid_passwd_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ssid_btn"
+        android:hint="@string/ssid_passwd_hint"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        />
+    <Button
+        android:id="@+id/ssid_passwd_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ssid_passwd_edit"
+        android:text="@string/ssid_passwd_btn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        />
+    <EditText
+        android:id="@+id/wifi_value_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ssid_btn"
+        android:hint="@string/wifi_value_hint"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <Button
+        android:id="@+id/wifi_value_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/wifi_value_edit"
+        android:text="@string/wifi_value_btn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        />
+    <EditText
+        android:id="@+id/rssi_value_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/wifi_value_btn"
+        android:hint="@string/rssi_value_hint"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <Button
+        android:id="@+id/rssi_value_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rssi_value_edit"
+        android:text="@string/rssi_value_btn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <EditText
+        android:id="@+id/service_ip_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rssi_value_btn"
+        android:hint="@string/service_ip_hint"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <Button
+        android:id="@+id/service_ip_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/service_ip_edit"
+        android:text="@string/service_ip_btn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    <EditText
+        android:id="@+id/manual_odt_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/service_ip_btn"
+        android:hint="@string/manual_odt_hint"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <Button
+        android:id="@+id/manual_odt_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/manual_odt_edit"
+        android:text="@string/manual_odt_btn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+    <EditText
+        android:id="@+id/auto_odt_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/manual_odt_btn"
+        android:hint="@string/auto_odt_hint"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+    <Button
+        android:id="@+id/auto_odt_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/auto_odt_edit"
+        android:text="@string/auto_odt_btn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        />
+    <Button
+        android:id="@+id/reboot_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/auto_odt_btn"
+        android:text="@string/reboot_btn"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
 
 </RelativeLayout>

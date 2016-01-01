@@ -37,40 +37,50 @@ public class MainActivity extends AppCompatActivity {
      * varible  param
      *
      */
+        TextView messageView;
+        EditText updEditText;
+        EditText ip;
+        EditText port;
+        Button link_btn;
+        String openStr;
+        Button opendoor_btn;
+        EditText opendoor_edit;
+        String closeStr;
+        Button closedoor_btn;
+        EditText closedoor_edit;
         Button AutoOpenTime_btn;
         EditText AutoOpenTime_edit;
-        EditText HandOpenTime_edit;
+        Button ManualOpenTime_btn;
+        EditText ManualOpenTime_edit;
         public Boolean IsThreadDisable = Boolean.valueOf(false);
         Button PWD_btn;
         EditText PWD_edit;
-        Button RSSI_btn1;
-        Button RSSI_btn2;
-        Button RSSI_btn3;
-        Button RSSI_btn4;
-        EditText RSSI_edit1;
-        EditText RSSI_edit2;
-        EditText RSSI_edit3;
-        EditText RSSI_edit4;
+        Button RSSI_btn;
+        EditText RSSI_edit;
         Button SSID_btn;
         EditText SSID_edit;
         Button ServiceIp_btn;
         EditText ServiceIP_edit;
+        EditText wifi_value;
+        Button wifi_value_btn;
+        Button restart_btn;
         EditText UDPtext;
 //        public UDPThread UDPThread = null;
 //        Boolean UDPreceive = Boolean.valueOf(false);
-        String buffer = "";
-        Bundle bundle = null;
-        String closeStr;
-        Button closedoor_btn;
-        EditText closedoor_edit;
+
+
         DatagramPacket datagramPacket = null;
         DatagramSocket datagramSocket = null;
-        Button handleOpenTime_btn;
         DataInputStream input = null;
-        EditText ip;
-        Button link_btn;
-        TextView messageView;
+        DataOutputStream out = null;
+        Socket socket = null;
+        public socketThread socketThread = null;
         Message msg = null;
+        String buffer = "";
+        Bundle bundle = null;
+
+        private static final String IP ="10.10.10.254";
+        private static final Integer Port = Integer.valueOf(6602);
 
     /**
      * create by xukang.wang on 2015/12/7
@@ -111,33 +121,13 @@ public class MainActivity extends AppCompatActivity {
 
         };
     }
-        String openStr;
-        Button opendoor_btn;
-        EditText opendoor_edit;
-        DataOutputStream out = null;
-        EditText port;
-        Button restart_btn;
-        Socket socket = null;
-        public socketThread socketThread = null;
-        EditText updEditText;
-        EditText value_1;
-        EditText value_2;
-        EditText value_3;
-        EditText value_4;
-        Button value_btn_1;
-        Button value_btn_2;
-        Button value_btn_3;
-        Button value_btn_4;
-        private static final String IP ="10.10.10.254";
-        private static final Integer Port = Integer.valueOf(6602);
+
 
     /**
      * created by xukang.wang on 2015/12/7
      * new version on 2015.12.29
      * check Number  what is substring, INT to HEX AND String
      *  getBytes.
-     * @param paramString
-     * @return
      */
 
     public static String getCheckNumber(String paramString){
@@ -154,8 +144,6 @@ public class MainActivity extends AppCompatActivity {
      * int to Hex()
      * create by xukang.wang on 2015/12/7
      * new version on 2015.12.29
-      * @param paramInteger
-     * @return
      */
     public static String intToHex(Integer paramInteger){
         return Integer.toHexString((paramInteger.intValue()&0x000000FF)|0xFFFFFF00).substring(6);
@@ -166,13 +154,6 @@ public class MainActivity extends AppCompatActivity {
      * create response command, need to know what the format of command
      * and valueOf(),getCheckNumber() meaning.
      * xukang.wang on 2015/12/7.
-     * @param paramString1
-     * @param paramString2
-     * @param paramString3
-     * @param paramString4
-     * @param paramString5
-     * @param paramString6
-     * @return
      */
 
     public static String CombineCommand(String paramString1,String paramString2,String paramString3,String paramString4,String paramString5,String paramString6){
@@ -231,9 +212,9 @@ public class MainActivity extends AppCompatActivity {
                                                          localIOException.printStackTrace();
                                                          return;
                                                      }
-                                                     MainActivity.this.socketThread = new MainActivity.socketThread(IP, Port);
-                                                     new Thread(MainActivity.this.socketThread).start();
-                                                     MainActivity.this.link_btn.setText("close");
+                                                 MainActivity.this.socketThread = new MainActivity.socketThread(IP, Port);
+                                                 new Thread(MainActivity.this.socketThread).start();
+                                                 MainActivity.this.link_btn.setText("close");
                                              }
                                          }
 
@@ -290,6 +271,69 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        this.SSID_edit=(EditText)findViewById(R.id.ssid_edit);
+        this.SSID_btn =(Button)findViewById(R.id.ssid_btn);
+        this.SSID_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if((MainActivity.this.socket==null)||(MainActivity.this.socket.isClosed())){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please connect servicer",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if (MainActivity.this.SSID_edit.getText().toString().trim().equals("")){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"SSID isnot blank",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                try{
+                    String str = CombineCommand("FFFE","01","04","07","00","{\"SSID\":\""+MainActivity.this.SSID_edit.getText().toString()+"\"}");
+                    MainActivity.this.out.write(str.getBytes());
+                    MainActivity.this.out.flush();
+                    MainActivity.this.bundle.clear();
+                    MainActivity.this.bundle.putString("msg", "change SSID"+str);
+                    MainActivity.this.msg = MainActivity.this.myHandler.obtainMessage();
+                    MainActivity.this.msg.what=22;
+                    MainActivity.this.msg.setData(MainActivity.this.bundle);
+                    MainActivity.this.msg.sendToTarget();
+                }catch (IOException localIOException){
+                    localIOException.printStackTrace();
+                }
+
+            }
+        });
+
+        this.PWD_edit =(EditText)findViewById(R.id.ssid_passwd_edit);
+        this.PWD_btn = (Button)findViewById(R.id.ssid_passwd_btn);
+        this.PWD_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if((MainActivity.this.socket==null)||(MainActivity.this.socket.isClosed())){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please connect servicer",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(MainActivity.this.PWD_edit.getText().toString().trim().equals("")){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please insert password!",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                try{
+                    String str = CombineCommand("FFFE","01","04","08","00","{\"PWD\":\""+MainActivity.this.PWD_edit.getText().toString()+"\"}");
+                    MainActivity.this.out.write(str.getBytes());
+                    MainActivity.this.out.flush();
+                    MainActivity.this.bundle.clear();
+                    MainActivity.this.bundle.putString("msg", "chang PWD" + str);
+                    MainActivity.this.msg = MainActivity.this.myHandler.obtainMessage();
+                    MainActivity.this.msg.what =22;
+                    MainActivity.this.msg.setData(MainActivity.this.bundle);
+                    MainActivity.this.msg.sendToTarget();
+                }catch (IOException localIOException){
+                    localIOException.printStackTrace();
+                }
+            }
+        });
+
+        
+
+
 
         this.updEditText =(EditText)findViewById(R.id.udptext_edit);
         this.updEditText.setText("6603");
