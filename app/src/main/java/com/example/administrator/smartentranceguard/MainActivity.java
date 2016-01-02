@@ -362,6 +362,127 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        this.RSSI_edit =(EditText)findViewById(R.id.rssi_value_edit);
+        this.RSSI_btn =(Button)findViewById(R.id.rssi_value_btn);
+        this.RSSI_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if((MainActivity.this.socket==null)||(MainActivity.this.socket.isClosed())){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please connect server",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(MainActivity.this.RSSI_edit.getText().toString().trim().equals("")){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please insert Rssi value",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                try{
+                    String str = CombineCommand("FFFE","01","04","12","00","{\"RSSI_Value\":\""+MainActivity.this.RSSI_edit.getText().toString()+"\"}");
+                    MainActivity.this.out.write(str.getBytes());
+                    MainActivity.this.out.flush();
+                    MainActivity.this. bundle.clear();
+                    MainActivity.this.bundle.putString("msg", "RSSI VALUE" + str);
+                    MainActivity.this.msg = MainActivity.this.myHandler.obtainMessage();
+                    MainActivity.this.msg.what = 22;
+                    MainActivity.this.msg.setData(MainActivity.this.bundle);
+                    MainActivity.this.msg.sendToTarget();
+
+                }catch (IOException localIOException){
+                    localIOException.printStackTrace();
+                }
+            }
+        });
+
+        this.ServiceIP_edit=(EditText)findViewById(R.id.service_ip_edit);
+        this.ServiceIp_btn =(Button)findViewById(R.id.service_ip_btn);
+        this.ServiceIp_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if((MainActivity.this.socket==null)||(MainActivity.this.socket.isClosed())){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please connect server",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(MainActivity.this.ServiceIP_edit.getText().toString().trim().equals("")){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please insert Service ip",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                try{
+                    String str = CombineCommand("FFFE","01","04","11","00","{\"ServiceIP\":\""+MainActivity.this.ServiceIP_edit.getText().toString()+"\"}");
+                    MainActivity.this.out.write(str.getBytes());
+                    MainActivity.this.out.flush();
+                    MainActivity.this.bundle.clear();
+                    MainActivity.this.bundle.putString("msg", "ServiceIP" + str);
+                    MainActivity.this.msg = MainActivity.this.myHandler.obtainMessage();
+                    MainActivity.this.msg.what =22;
+                    MainActivity.this.msg.setData(MainActivity.this.bundle);
+                    MainActivity.this.msg.sendToTarget();
+                }catch (IOException localIOException){
+
+                    localIOException.printStackTrace();
+                }
+            }
+        });
+
+        this.ManualOpenTime_edit = (EditText)findViewById(R.id.manual_odt_edit);
+        this.ManualOpenTime_btn =(Button)findViewById(R.id.manual_odt_btn);
+        this.ManualOpenTime_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if((MainActivity.this.socket==null)||(MainActivity.this.socket.isClosed())){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please connect server",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(MainActivity.this.ManualOpenTime_edit.getText().toString().equals("")){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please insert time",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                try{
+                    String str = CombineCommand("FFFE","01","04","0B","00","{\"HandCloseTime\":\""+MainActivity.this.ManualOpenTime_edit.getText().toString()+"\"}");
+                    MainActivity.this.out.write(str.getBytes());
+                    MainActivity.this.out.flush();
+                    MainActivity.this.bundle.clear();
+                    MainActivity.this.bundle.putString("msg", "Manual time" + str);
+                    MainActivity.this.msg = MainActivity.this.myHandler.obtainMessage();
+                    MainActivity.this.msg.what = 22;
+                    MainActivity.this.msg.setData(MainActivity.this.bundle);
+                    MainActivity.this.msg.sendToTarget();
+                }catch (IOException localIOException){
+                    localIOException.printStackTrace();
+                }
+            }
+        });
+
+        this.AutoOpenTime_edit =(EditText)findViewById(R.id.auto_odt_edit);
+        this.AutoOpenTime_btn =(Button)findViewById(R.id.auto_odt_btn);
+        this.AutoOpenTime_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if((MainActivity.this.socket == null)||(MainActivity.this.socket.isClosed())){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please connect server",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(MainActivity.this.AutoOpenTime_edit.getText().toString().equals("")){
+                    Toast.makeText(MainActivity.this.getApplicationContext(),"please insert auto time",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                try{
+                    String str = CombineCommand("FFFE","01","04","0C","00","{\"AutoOpenTime\":\""+MainActivity.this.AutoOpenTime_edit.getText().toString()+"\"}");
+                    MainActivity.this.out.write(str.getBytes());
+                    MainActivity.this.out.flush();
+                    MainActivity.this.bundle.clear();
+                    MainActivity.this.bundle.putString("msg", "auto time" + str);
+                    MainActivity.this.msg = MainActivity.this.myHandler.obtainMessage();
+                    MainActivity.this.msg.what =22;
+                    MainActivity.this.msg.setData(MainActivity.this.bundle);
+                    MainActivity.this.msg.sendToTarget();
+                }catch (IOException localIOException){
+                    localIOException.printStackTrace();
+                }
+
+
+            }
+        });
+
+
 
 
         
